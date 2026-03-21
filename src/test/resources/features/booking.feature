@@ -5,3 +5,4 @@ Feature: Booking API
   Scenario: Create booking
     When Create booking
     Then Verify status 200
+    And Verify payload

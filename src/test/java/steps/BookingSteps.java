@@ -46,5 +46,12 @@ public class BookingSteps {
         new HealthCheck().verifyBookingServiceIsUp();
     }
 
+    @When("Verify payload")
+    public void verifyPayload() {
+        List<Booking> bookings = JsonDataReader.getBookingData();
+        Booking booking = bookings.get(0); // pick first booking for test
+        // Validate payload
+        BookingAssertions.verifyBooking(response, booking);
 
+    }
 }
