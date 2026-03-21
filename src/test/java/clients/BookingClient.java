@@ -23,6 +23,27 @@ public class BookingClient {
                 .post("/booking");
     }
 
+    public Response deleteBooking(int id, String token) {
+        return given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when()
+                .log().all()
+                .delete( "https://restful-booker.herokuapp.com/booking/"+id)
+                .then()
+                .log().all()
+                .statusCode(201)
+                .extract()
+                .response();
+
+    }
+
+    // Get a booking by ID
+    public Response getBookingById(int Id) {
+        return given()
+                .get(RestAssured.baseURI + BOOKING_ENDPOINT + Id);
+    }
 
     public Response healthCheck() {
         return given().get(RestAssured.baseURI);

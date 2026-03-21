@@ -2,6 +2,7 @@ package steps;
 
 
 import assertions.BookingAssertions;
+import clients.AuthClient;
 import clients.BookingClient;
 import config.BaseTest;
 import io.cucumber.java.Before;
@@ -12,12 +13,16 @@ import io.restassured.response.Response;
 import model.Booking;
 import utils.HealthCheck;
 import utils.JsonDataReader;
+import utils.PropertyReader;
+
 import java.util.List;
 
 
 public class BookingSteps {
     BookingClient client = new BookingClient();
     Response response;
+    private static String token;
+    private final AuthClient authClient = new AuthClient();
     private static int bookingId;
 
 
@@ -57,5 +62,20 @@ public class BookingSteps {
     @Given("Get all bookings")
     public void getAll() {
         response = client.getAll();
+    }
+
+    @When("I delete the booking")
+    public void deleteBooking() {
+
+        System.out.println("username....."+PropertyReader.getProperty("username"));
+        System.out.println("password....."+PropertyReader.getProperty("password"));
+        token = authClient.getAuthToken(PropertyReader.getProperty("username"),PropertyReader.getProperty("password"));
+        client.deleteBooking(bookingId, token);
+    }
+
+    @Then("the booking should not be retrievable")
+    public void verifyDeletedBooking() {
+        int statusCode = client.getBookingById(bookingId).getStatusCode();
+        assert statusCode == 404 : "Expected status code 404 for deleted booking but found " + statusCode;
     }
 }

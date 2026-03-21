@@ -10,3 +10,8 @@ Feature: Booking API
   Scenario: Get all bookings
     Given Get all bookings
     Then Verify status 200
+
+  Scenario: Delete booking
+    Given Create booking
+    When I delete the booking
+    Then the booking should not be retrievable
