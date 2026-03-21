@@ -1,8 +1,7 @@
 Feature: Booking API
-
+  Background:
+    Given the booking service is available
 
   Scenario: Create booking
     When Create booking
-
-
-
+    Then Verify status 200
