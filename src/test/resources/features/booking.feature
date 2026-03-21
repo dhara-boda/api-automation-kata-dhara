@@ -6,3 +6,7 @@ Feature: Booking API
     When Create booking
     Then Verify status 200
     And Verify payload
+
+  Scenario: Get all bookings
+    Given Get all bookings
+    Then Verify status 200

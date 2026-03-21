@@ -52,6 +52,10 @@ public class BookingSteps {
         Booking booking = bookings.get(0); // pick first booking for test
         // Validate payload
         BookingAssertions.verifyBooking(response, booking);
+    }
 
+    @Given("Get all bookings")
+    public void getAll() {
+        response = client.getAll();
     }
 }
