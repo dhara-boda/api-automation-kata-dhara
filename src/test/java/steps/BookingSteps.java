@@ -66,9 +66,6 @@ public class BookingSteps {
 
     @When("I delete the booking")
     public void deleteBooking() {
-
-        System.out.println("username....."+PropertyReader.getProperty("username"));
-        System.out.println("password....."+PropertyReader.getProperty("password"));
         token = authClient.getAuthToken(PropertyReader.getProperty("username"),PropertyReader.getProperty("password"));
         client.deleteBooking(bookingId, token);
     }
@@ -77,5 +74,28 @@ public class BookingSteps {
     public void verifyDeletedBooking() {
         int statusCode = client.getBookingById(bookingId).getStatusCode();
         assert statusCode == 404 : "Expected status code 404 for deleted booking but found " + statusCode;
+    }
+
+    @When("I create a booking with missing firstname")
+    public void createBookingMissingFirstname() {
+        Booking booking = JsonDataReader.getBookingData().get(0);
+        booking.setFirstname(null); // remove firstname
+        response = client.create(booking);
+    }
+
+    @When("I create a booking with invalid totalprice type")
+    public void createBookingInvalidTotalprice() {
+        List<Booking> bookings = JsonDataReader.getBookingData();
+        Booking booking = bookings.get(0); // pick first booking for test
+        booking.setTotalprice("abc");
+        response = client.create(booking);
+    }
+
+    @When("I create a booking with checkout before checkin")
+    public void createBookingInvalidDates() {
+        Booking booking = JsonDataReader.getBookingData().get(0);
+        booking.getBookingdates().setCheckin("2026-03-25");
+        booking.getBookingdates().setCheckout("2022-03-21");
+        response = client.create(booking);
     }
 }

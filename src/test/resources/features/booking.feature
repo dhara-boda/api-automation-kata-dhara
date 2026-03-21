@@ -15,3 +15,15 @@ Feature: Booking API
     Given Create booking
     When I delete the booking
     Then the booking should not be retrievable
+
+  Scenario: Create booking with missing required fields
+    When I create a booking with missing firstname
+    Then Verify status 400
+
+  Scenario: Create booking with invalid data types
+    When I create a booking with invalid totalprice type
+    Then Verify status 400
+
+  Scenario: Create booking with invalid booking dates
+    When I create a booking with checkout before checkin
+    Then Verify status 400
