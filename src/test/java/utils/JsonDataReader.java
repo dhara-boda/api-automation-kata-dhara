@@ -15,7 +15,7 @@ public class JsonDataReader {
         try {
             Gson gson = new Gson();
 
-            Reader reader = new FileReader("src/test/resources/testdata/booking.json");
+            Reader reader = new FileReader("src/test/resources/datafiles/booking.json");
 
             Type bookingListType = new TypeToken<List<Booking>>() {}.getType();
 

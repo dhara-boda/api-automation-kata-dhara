@@ -25,7 +25,6 @@ public class BookingSteps {
     private final AuthClient authClient = new AuthClient();
     private static int bookingId;
 
-
     @Before
     public void setup() {
         BaseTest.setup();
@@ -94,8 +93,8 @@ public class BookingSteps {
     @When("I create a booking with checkout before checkin")
     public void createBookingInvalidDates() {
         Booking booking = JsonDataReader.getBookingData().get(0);
-        booking.getBookingdates().setCheckin("2026-03-25");
-        booking.getBookingdates().setCheckout("2022-03-21");
+        booking.getBookingdates().setCheckin(PropertyReader.getTestData("setcheckin"));
+        booking.getBookingdates().setCheckout(PropertyReader.getTestData("setcheckout"));
         response = client.create(booking);
     }
 }
