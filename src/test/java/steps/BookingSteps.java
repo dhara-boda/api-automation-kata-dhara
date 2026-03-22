@@ -14,6 +14,8 @@ import model.Booking;
 import utils.HealthCheck;
 import utils.JsonDataReader;
 import utils.PropertyReader;
+import org.apache.logging.log4j.Logger;
+import utils.LoggerUtil;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class BookingSteps {
     private static String token;
     private final AuthClient authClient = new AuthClient();
     private static int bookingId;
+    private static final Logger log = LoggerUtil.getLogger(BookingSteps.class);
 
     @Before
     public void setup() {
@@ -34,10 +37,12 @@ public class BookingSteps {
     public void createBooking() {
         List<Booking> bookings = JsonDataReader.getBookingData();
         Booking booking = bookings.get(0); // pick first booking for test
+        log.info("Creating booking request");
         response = client.create(booking);
-
+        log.info("Response received: {}", response.asString());
         // Capture booking ID
         bookingId = response.jsonPath().getInt("bookingid");
+        log.info("Booking ID created: {}", bookingId);
 
     }
 
@@ -65,8 +70,11 @@ public class BookingSteps {
 
     @When("I delete the booking")
     public void deleteBooking() {
+        log.info("Starting deleting of bookings");
         token = authClient.getAuthToken(PropertyReader.getProperty("username"),PropertyReader.getProperty("password"));
         client.deleteBooking(bookingId, token);
+        log.info("Deleting booking ID: {}", bookingId);
+        log.info("Cleanup completed");
     }
 
     @Then("the booking should not be retrievable")
